@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# large vendored runtime assets (over GitHub's 100MB file limit; refetch locally)
+prototype/public/sherpa/*.data
+prototype/public/sherpa/*.wasm
+prototype/public/vad/*.wasm
+*.onnx
+
+# build output
+.next/
+dist/
+build/
+out/
+.turbo/
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+*.log
+.vscode/

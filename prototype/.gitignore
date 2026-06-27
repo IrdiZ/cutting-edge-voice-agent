@@ -1,0 +1,6 @@
+
+# vendored sherpa-onnx WASM (large; re-download from k2-fsa releases)
+public/sherpa/*.wasm
+public/sherpa/*.data
+public/vad/*.wasm
+public/vad/*.onnx

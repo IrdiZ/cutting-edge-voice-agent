@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voice Cockpit — M1 prototype</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">◆</span>
+        <div>
+          <div class="brand-title">Radiology Voice Cockpit</div>
+          <div class="brand-sub">M1 prototype · fire-on-partial reactive loop</div>
+        </div>
+      </div>
+      <div class="controls">
+        <select id="adapter-select" class="select" title="STT engine">
+          <option value="sherpa">On-device · Streaming (sherpa) ★</option>
+          <option value="webspeech">Web Speech (cloud)</option>
+          <option value="ondevice">On-device · Whisper (WebGPU)</option>
+        </select>
+        <span id="adapter-status" class="badge">—</span>
+        <button id="mic-btn" class="btn btn-primary" aria-pressed="false">🎙 Start mic</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- worklist -->
+      <section class="panel worklist">
+        <h2 class="panel-h">Worklist</h2>
+        <ul id="worklist" class="wl"></ul>
+      </section>
+
+      <!-- case / report -->
+      <section class="panel case">
+        <div class="case-head">
+          <h2 class="panel-h" id="case-title">No case open</h2>
+          <span id="case-status" class="status" aria-live="polite">idle</span>
+        </div>
+        <div class="report">
+          <div class="rep-block">
+            <div class="rep-label">Findings</div>
+            <div id="findings" class="rep-body muted">—</div>
+          </div>
+          <div class="rep-block">
+            <div class="rep-label">Impression <span id="imp-chip" class="chip hidden">generating…</span></div>
+            <div id="impression" class="rep-body muted">—</div>
+          </div>
+          <div id="prior" class="rep-block prior hidden">
+            <div class="rep-label">◷ Prior study</div>
+            <div class="rep-body muted">Comparison panel — prior CT, 2025-11-02.</div>
+          </div>
+        </div>
+        <div id="confirm-bar" class="confirm-bar hidden" role="alert" aria-live="assertive">
+          <span>⚠ <b id="confirm-text">Sign &amp; next?</b> — say “confirm”, or</span>
+          <button id="confirm-btn" class="btn btn-danger">Confirm</button>
+          <button id="cancel-btn" class="btn">Cancel</button>
+        </div>
+      </section>
+
+      <!-- HUD -->
+      <aside class="panel hud">
+        <h2 class="panel-h">Live HUD</h2>
+
+        <div class="hud-block">
+          <div class="hud-label">Transcript</div>
+          <div id="transcript" class="transcript muted" aria-live="polite">…start the mic or run a simulation</div>
+        </div>
+
+        <div class="hud-block">
+          <div class="hud-label">Last command</div>
+          <div id="last-cmd" class="last-cmd muted">—</div>
+        </div>
+
+        <div class="hud-block">
+          <div class="hud-label">Latency <span id="lat-note" class="lat-note"></span></div>
+          <div class="lat-grid">
+            <div class="lat-cell"><span class="lat-k">capture→1st partial</span><span id="lat-ttfp" class="lat-v">– ms</span></div>
+            <div class="lat-cell"><span class="lat-k">decode (1st→claim)</span><span id="lat-dec" class="lat-v">– ms</span></div>
+            <div class="lat-cell big"><span class="lat-k">mouth→command</span><span id="lat-m2c" class="lat-v">– ms</span></div>
+          </div>
+        </div>
+
+        <div class="hud-block">
+          <div class="hud-label">Command log</div>
+          <ul id="cmd-log" class="cmd-log"></ul>
+        </div>
+
+        <div class="hud-block sim">
+          <div class="hud-label">Simulate (no mic — synthetic on-device timing)</div>
+          <div id="sim-buttons" class="sim-buttons"></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="foot">
+      <span id="foot-note">Web Speech API is cloud-backed — it validates the <b>loop</b>, not the latency target. On-device numbers arrive in M2 (WebGPU). Simulated runs show synthetic on-device timing.</span>
+    </footer>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

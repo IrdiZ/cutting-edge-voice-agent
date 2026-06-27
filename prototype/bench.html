@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voice Cockpit — STT bake-off bench</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+  <style>
+    .bench { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .bench h1 { font-size: 22px; margin: 0 0 4px; }
+    .bench .sub { color: var(--mut); font-size: 13px; margin-bottom: 20px; }
+    .prompts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .prow { display: grid; grid-template-columns: 70px 1fr 130px 90px; gap: 12px; align-items: center;
+            padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+    .prow .pid { font: 600 11px/1 var(--mono); color: var(--dim); }
+    .prow .psay { font-size: 14px; }
+    .prow .psay .k { font: 600 10px/1 var(--mono); text-transform: uppercase; color: var(--dim); margin-right: 8px; }
+    .prow.dictation { border-color: rgba(167,139,250,.3); }
+    .prow .pstate { font: 600 11px/1 var(--mono); }
+    .prow .pstate.recorded { color: var(--ok); }
+    .prow .pstate.empty { color: var(--dim); }
+    .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+    #bench-status { font: 600 12px/1 var(--mono); color: var(--gold); }
+    table.score { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13.5px; }
+    table.score th { text-align: left; font: 600 10.5px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase;
+                     color: var(--dim); padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    table.score td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,.05); color: var(--mut); }
+    table.score td b { color: var(--ink); }
+    table.score tr.best td { background: rgba(45,212,191,.07); }
+    .hint { color: var(--dim); font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="bench">
+    <h1>STT bake-off bench</h1>
+    <div class="sub">Record the script once (your real voice), then replay every engine against the same audio. Measures WER + command-intent accuracy + speed. Recordings persist in this browser.</div>
+
+    <div class="toolbar">
+      <button id="rec-all" class="btn btn-primary">● Record session (guided)</button>
+      <button id="load-synth" class="btn">Load synthetic (JFK) — verify pipeline</button>
+      <button id="run" class="btn btn-primary">▶ Run bake-off</button>
+      <span id="bench-status">—</span>
+    </div>
+
+    <div id="prompts" class="prompts"></div>
+    <div id="scorecard"></div>
+    <a href="/" class="hint">← back to the cockpit</a>
+  </div>
+  <script type="module" src="/src/bench/main.ts"></script>
+</body>
+</html>

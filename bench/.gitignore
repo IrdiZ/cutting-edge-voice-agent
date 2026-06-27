@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+
+# Real reading-room audio is PHI-adjacent — never commit it. Drop it under datasets/audio/.
+datasets/audio/
+results/*.json

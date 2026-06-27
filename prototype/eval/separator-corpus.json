@@ -1,0 +1,1026 @@
+[
+  {
+    "text": "open the anderson case",
+    "label": "command",
+    "intent": "open_case",
+    "commandSpan": "open the anderson case",
+    "note": "open_case with worklist name",
+    "category": "pure-command"
+  },
+  {
+    "text": "pull up bauer please",
+    "label": "command",
+    "intent": "open_case",
+    "commandSpan": "pull up bauer",
+    "note": "open_case synonym pull up + trailing pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "let's go to the next case",
+    "label": "command",
+    "intent": "next_case",
+    "commandSpan": "go to the next case",
+    "note": "next_case with filler lead-in",
+    "category": "pure-command"
+  },
+  {
+    "text": "advance to the next study thanks",
+    "label": "command",
+    "intent": "next_case",
+    "commandSpan": "advance to the next study",
+    "note": "next_case synonym advance + trailing thanks",
+    "category": "pure-command"
+  },
+  {
+    "text": "go back to the previous case",
+    "label": "command",
+    "intent": "previous_case",
+    "commandSpan": "go back to the previous case",
+    "note": "previous_case standard phrasing",
+    "category": "pure-command"
+  },
+  {
+    "text": "take me to the prior patient please",
+    "label": "command",
+    "intent": "previous_case",
+    "commandSpan": "take me to the prior patient",
+    "note": "previous_case synonym prior patient + pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "compare with the prior study",
+    "label": "command",
+    "intent": "compare_prior",
+    "commandSpan": "compare with the prior study",
+    "note": "compare_prior standard",
+    "category": "pure-command"
+  },
+  {
+    "text": "show me the comparison for chen",
+    "label": "command",
+    "intent": "compare_prior",
+    "commandSpan": "show me the comparison",
+    "note": "compare_prior synonym with name",
+    "category": "pure-command"
+  },
+  {
+    "text": "open delacroix and compare priors",
+    "label": "command",
+    "intent": "compare_prior",
+    "commandSpan": "compare priors",
+    "note": "compare_prior with name reference",
+    "category": "pure-command"
+  },
+  {
+    "text": "start the findings section",
+    "label": "command",
+    "intent": "begin_findings",
+    "commandSpan": "start the findings section",
+    "note": "begin_findings synonym start",
+    "category": "pure-command"
+  },
+  {
+    "text": "begin findings now please",
+    "label": "command",
+    "intent": "begin_findings",
+    "commandSpan": "begin findings",
+    "note": "begin_findings standard + pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "let's jump into findings",
+    "label": "command",
+    "intent": "begin_findings",
+    "commandSpan": "jump into findings",
+    "note": "begin_findings synonym jump into",
+    "category": "pure-command"
+  },
+  {
+    "text": "go to the impression",
+    "label": "command",
+    "intent": "begin_impression",
+    "commandSpan": "go to the impression",
+    "note": "begin_impression synonym go to",
+    "category": "pure-command"
+  },
+  {
+    "text": "start the impression section thanks",
+    "label": "command",
+    "intent": "begin_impression",
+    "commandSpan": "start the impression section",
+    "note": "begin_impression start + trailing thanks",
+    "category": "pure-command"
+  },
+  {
+    "text": "generate the impression for me",
+    "label": "command",
+    "intent": "generate_impression",
+    "commandSpan": "generate the impression",
+    "note": "generate_impression standard + pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "auto generate impression please",
+    "label": "command",
+    "intent": "generate_impression",
+    "commandSpan": "auto generate impression",
+    "note": "generate_impression synonym auto generate",
+    "category": "pure-command"
+  },
+  {
+    "text": "create the impression from the findings",
+    "label": "command",
+    "intent": "generate_impression",
+    "commandSpan": "create the impression from the findings",
+    "note": "generate_impression synonym create",
+    "category": "pure-command"
+  },
+  {
+    "text": "stop dictation",
+    "label": "command",
+    "intent": "stop_dictation",
+    "commandSpan": "stop dictation",
+    "note": "stop_dictation bare",
+    "category": "pure-command"
+  },
+  {
+    "text": "pause the dictation for a sec",
+    "label": "command",
+    "intent": "stop_dictation",
+    "commandSpan": "pause the dictation",
+    "note": "stop_dictation synonym pause",
+    "category": "pure-command"
+  },
+  {
+    "text": "stop recording please",
+    "label": "command",
+    "intent": "stop_dictation",
+    "commandSpan": "stop recording",
+    "note": "stop_dictation synonym stop recording + pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "undo that",
+    "label": "command",
+    "intent": "undo",
+    "commandSpan": "undo that",
+    "note": "undo standard",
+    "category": "pure-command"
+  },
+  {
+    "text": "scratch that last bit please",
+    "label": "command",
+    "intent": "undo",
+    "commandSpan": "scratch that last bit",
+    "note": "undo synonym scratch that + pleasantry",
+    "category": "pure-command"
+  },
+  {
+    "text": "sign it and go to the next one",
+    "label": "command",
+    "intent": "sign_and_next",
+    "commandSpan": "sign it and go to the next one",
+    "note": "sign_and_next standard",
+    "category": "pure-command"
+  },
+  {
+    "text": "sign off on patel and move on thanks",
+    "label": "command",
+    "intent": "sign_and_next",
+    "commandSpan": "sign off on patel and move on",
+    "note": "sign_and_next synonym sign off + move on + name + trailing thanks",
+    "category": "pure-command"
+  },
+  {
+    "text": "there is a six millimeter spiculated nodule in the right upper lobe with adjacent pleural tethering concerning for malignancy",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT chest nodule",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the liver demonstrates a peripheral hypodense lesion with nodular discontinuous peripheral enhancement on the arterial phase compatible with a hemangioma",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT abdomen liver hemangioma",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "diffusion weighted imaging shows restricted diffusion in the left middle cerebral artery territory consistent with an acute infarct",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "MR brain stroke",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a comminuted intra-articular fracture of the distal radius with dorsal angulation and associated ulnar styloid avulsion",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "XR wrist fracture",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the gallbladder is distended with wall thickening and pericholecystic fluid and a sonographic murphy sign was elicited compatible with acute cholecystitis",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "US RUQ cholecystitis",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "a filling defect is seen within the right main pulmonary artery extending into the lobar branches consistent with acute pulmonary embolism",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CTPA PE",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is moderate degenerative disc disease at l4 l5 with a broad based posterior disc protrusion causing mild central canal stenosis and bilateral lateral recess narrowing",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "MR lumbar spine",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the visualized osseous structures demonstrate a lytic lesion within the right iliac wing with a wide zone of transition and associated soft tissue component",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT pelvis bone lesion",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the thyroid gland contains a hypoechoic solid nodule in the left lobe with microcalcifications and taller than wide morphology classified as ti-rads category five",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "US thyroid TI-RADS",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a moderate sized pericardial effusion with diastolic collapse of the right ventricle raising concern for tamponade physiology",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "Echo/CT pericardial effusion",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the right kidney contains a five millimeter non obstructing calculus within the lower pole interpolar collecting system without associated hydronephrosis",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT KUB stone",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the supraspinatus tendon demonstrates a full thickness tear with tendon retraction to the level of the glenoid and moderate muscle atrophy",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "MR shoulder rotator cuff",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the heart size is normal the lungs are clear without focal consolidation pleural effusion or pneumothorax and the cardiomediastinal silhouette is unremarkable",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CXR normal",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a complex cystic adnexal mass on the right with internal septations and mural nodularity demonstrating internal vascularity on color doppler",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "US pelvis adnexal mass",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "axial and coronal images demonstrate complete opacification of the maxillary sinuses with bony sclerosis of the walls suggesting chronic sinusitis",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT sinus",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a fluid attenuation inversion recovery hyperintense lesion in the periventricular white matter oriented perpendicular to the lateral ventricles consistent with a demyelinating plaque",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "MR brain MS",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the abdominal aorta demonstrates a fusiform infrarenal aneurysm measuring four point eight centimeters in maximal transverse diameter with mural thrombus",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT/US AAA",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a moderate joint effusion in the right knee with a horizontal tear of the posterior horn of the medial meniscus extending to the inferior articular surface",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "MR knee meniscus",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the appendix is dilated measuring eleven millimeters with periappendiceal fat stranding and an appendicolith compatible with acute appendicitis",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT abdomen appendicitis",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the visualized portions of the liver demonstrate coarsened nodular echotexture with surface nodularity and a recanalized paraumbilical vein consistent with cirrhosis and portal hypertension",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "US liver cirrhosis",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is a subdural collection of mixed density layering along the left cerebral convexity with eight millimeters of midline shift and effacement of the lateral ventricle",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT head subdural",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "mammographic images demonstrate a spiculated mass in the upper outer quadrant of the left breast with associated pleomorphic microcalcifications classified as bi-rads category five",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "Mammo BI-RADS",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "there is anterolisthesis of l5 on s1 with bilateral pars interarticularis defects and resultant bilateral neural foraminal narrowing",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "XR/MR lumbar spondylolisthesis",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the pancreatic head demonstrates a hypoenhancing mass with upstream dilatation of the main pancreatic duct and double duct sign raising concern for adenocarcinoma",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "CT/MR pancreas",
+    "category": "pure-dictation"
+  },
+  {
+    "text": "the lungs are clear without focal consolidation or effusion no acute abnormality next case",
+    "label": "mixed",
+    "intent": "next_case",
+    "commandSpan": "next case",
+    "note": "dictation findings then trailing navigation command 'next case'",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the liver is normal in size and contour with no focal lesion compare with prior",
+    "label": "mixed",
+    "intent": "compare_prior",
+    "commandSpan": "compare with prior",
+    "note": "finding sentence followed by compare prior command",
+    "category": "embedded-command"
+  },
+  {
+    "text": "no evidence of acute intracranial hemorrhage or mass effect sign and next",
+    "label": "mixed",
+    "intent": "sign_and_next",
+    "commandSpan": "sign and next",
+    "note": "normal head finding then destructive sign_and_next at end",
+    "category": "embedded-command"
+  },
+  {
+    "text": "there is mild degenerative change at l4 l5 without canal stenosis begin impression",
+    "label": "mixed",
+    "intent": "begin_impression",
+    "commandSpan": "begin impression",
+    "note": "spine finding then dictation-control to start impression section",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the cardiomediastinal silhouette is within normal limits findings the lungs are clear",
+    "label": "mixed",
+    "intent": "begin_findings",
+    "commandSpan": "findings",
+    "note": "command 'findings' embedded mid-prose to open findings section, dictation on both sides",
+    "category": "embedded-command"
+  },
+  {
+    "text": "redemonstration of the right renal cyst unchanged in size generate impression",
+    "label": "mixed",
+    "intent": "generate_impression",
+    "commandSpan": "generate impression",
+    "note": "finding then async generate_impression command",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the gallbladder is surgically absent no biliary ductal dilatation pull up anderson",
+    "label": "mixed",
+    "intent": "open_case",
+    "commandSpan": "pull up anderson",
+    "note": "finding then open_case with worklist name slot Anderson",
+    "category": "embedded-command"
+  },
+  {
+    "text": "small hiatal hernia is again noted no other significant abnormality previous case",
+    "label": "mixed",
+    "intent": "previous_case",
+    "commandSpan": "previous case",
+    "note": "finding then navigate previous_case",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the visualized osseous structures are intact without aggressive lesion stop dictation",
+    "label": "mixed",
+    "intent": "stop_dictation",
+    "commandSpan": "stop dictation",
+    "note": "finding then stop_dictation control command",
+    "category": "embedded-command"
+  },
+  {
+    "text": "there is a three millimeter nodule in the right upper lobe scratch that two millimeter nodule",
+    "label": "mixed",
+    "intent": "undo",
+    "commandSpan": "scratch that",
+    "note": "command 'scratch that' mid-utterance correcting prior dictation",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the spleen pancreas and adrenal glands are unremarkable show prior abdomen ct",
+    "label": "mixed",
+    "intent": "compare_prior",
+    "commandSpan": "show prior",
+    "note": "finding then compare_prior via 'show prior' with object trailing into dictation context",
+    "category": "embedded-command"
+  },
+  {
+    "text": "no pneumothorax or pleural effusion is identified findings impression and recommendation to follow",
+    "label": "mixed",
+    "intent": "begin_findings",
+    "commandSpan": "findings",
+    "note": "'findings' token embedded as section command between prose phrases",
+    "category": "embedded-command"
+  },
+  {
+    "text": "degenerative endplate changes are present throughout the thoracic spine go next",
+    "label": "mixed",
+    "intent": "next_case",
+    "commandSpan": "go next",
+    "note": "finding then 'go next' navigation variant",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the kidneys enhance symmetrically without hydronephrosis load patel ultrasound",
+    "label": "mixed",
+    "intent": "open_case",
+    "commandSpan": "load patel",
+    "note": "finding then open_case load with name Patel, object continues in dictation",
+    "category": "embedded-command"
+  },
+  {
+    "text": "there is no acute fracture or dislocation of the wrist sign off and move on",
+    "label": "mixed",
+    "intent": "sign_and_next",
+    "commandSpan": "sign off",
+    "note": "normal extremity finding then 'sign off' destructive command with trailing pleasantry",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the thyroid gland is heterogeneous without a dominant nodule done",
+    "label": "mixed",
+    "intent": "stop_dictation",
+    "commandSpan": "done",
+    "note": "finding then single-token 'done' stop_dictation control at end",
+    "category": "embedded-command"
+  },
+  {
+    "text": "stable postsurgical changes in the left breast no suspicious mass dictate impression now",
+    "label": "mixed",
+    "intent": "begin_impression",
+    "commandSpan": "dictate impression",
+    "note": "finding then 'dictate impression' control variant with trailing 'now'",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the aorta is normal in caliber without aneurysm or dissection compare to the prior cta",
+    "label": "mixed",
+    "intent": "compare_prior",
+    "commandSpan": "compare",
+    "note": "finding then 'compare' command token with object phrase as dictation context",
+    "category": "embedded-command"
+  },
+  {
+    "text": "there are scattered subcentimeter mediastinal nodes likely reactive auto impression",
+    "label": "mixed",
+    "intent": "generate_impression",
+    "commandSpan": "auto impression",
+    "note": "finding then 'auto impression' generate variant",
+    "category": "embedded-command"
+  },
+  {
+    "text": "no free fluid or free air within the abdomen and pelvis prior case okafor",
+    "label": "mixed",
+    "intent": "previous_case",
+    "commandSpan": "prior case",
+    "note": "finding then 'prior case' previous_case command, name Okafor trails into context",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the prostate is enlarged measuring forty cubic centimeters undo",
+    "label": "mixed",
+    "intent": "undo",
+    "commandSpan": "undo",
+    "note": "finding then single-token 'undo' command at end",
+    "category": "embedded-command"
+  },
+  {
+    "text": "mild bibasilar atelectasis is noted without focal airspace disease open schmidt chest ct",
+    "label": "mixed",
+    "intent": "open_case",
+    "commandSpan": "open schmidt",
+    "note": "finding then open_case with name Schmidt, modality object trails into dictation",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the bladder is well distended with smooth walls no calculus generate the impression for me",
+    "label": "mixed",
+    "intent": "generate_impression",
+    "commandSpan": "generate",
+    "note": "finding then 'generate' token with trailing pleasantry 'for me'",
+    "category": "embedded-command"
+  },
+  {
+    "text": "there is trace pericardial effusion without tamponade physiology findings cardiomediastinal silhouette normal",
+    "label": "mixed",
+    "intent": "begin_findings",
+    "commandSpan": "findings",
+    "note": "prose then 'findings' section command embedded, dictation resumes after",
+    "category": "embedded-command"
+  },
+  {
+    "text": "the patient signed the consent form prior to the contrast administration",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "contains 'sign' as in signature, not the imaging finding-sign nor a command verb",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "we will compare to the prior exam which shows stable postsurgical changes",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'compare' and 'prior' are dictated clinical reasoning not a navigate-to-prior command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "findings include a sign of early degenerative change at the l four l five level",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'findings' and 'sign' are report content not section jumps or signoff",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the comet tail sign is identified within the right hepatic lobe consistent with a focal lesion",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'sign' is a radiologic sign descriptor not a command to sign the report",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "next the axial sequences demonstrate no acute intracranial hemorrhage",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'next' is a discourse connector not a next-image navigation command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "go ahead and note that the spleen is normal in size and contour",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'go' appears but the whole phrase is conversational filler within dictated prose",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the impression is delayed and will be added once the prior study is reviewed",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'impression' is named as content not a jump-to-impression command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "open communication with the referring clinician was documented in the chart",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'open' is descriptive of communication not an open-study command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "select images from the prior outside study were available for comparison",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'select' is an adjective here not a select command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "there is a positive fat pad sign indicating a possible occult elbow fracture",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'sign' is the fat pad sign finding not signoff",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "delete this artifact aside the lung bases appear clear bilaterally",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'delete' embedded in a misspoken aside but reads as continued dictation about clearing artifact",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "save for a tiny subcentimeter cyst the kidneys are unremarkable",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'save for' is the idiom meaning except not a save command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the silhouette sign is preserved at the right heart border",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "named imaging sign not a signing action",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "stop signs of cord compression are absent on the sagittal images",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'stop' and 'signs' adjacent but part of clinical phrase, no command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "previous mammogram from two years ago is the prior we will reference",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'prior' dictated as content referring to the old study not a navigation command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "scroll preserved bowel gas pattern with no evidence of obstruction",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'scroll' is an ASR misrecognition embedded in flowing dictation about bowel gas",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the double duct sign raises concern for a pancreatic head mass",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'sign' is the double duct sign not signoff",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "add the following to the history the patient reports worsening dyspnea on exertion",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'add the following to the history' is dictated narration of history content not an insert command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "measure for measure the lesion is grossly stable compared with the baseline",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'measure' in the idiom not a measurement-tool command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "close inspection reveals subtle ground glass opacity in the right upper lobe",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'close' is an adverb modifying inspection not a close command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the report will be finalized after the addendum regarding the incidental thyroid nodule",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'report' and 'finalized' as content not a finalize-report command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "comparison is made to the chest radiograph which shows no interval change",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'comparison' as section content, narrating the comparison not invoking a compare command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "send him for a follow up ultrasound in three months to reassess the gallbladder",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'send' is a clinical recommendation about the patient not a send-report command",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the new finding in the liver represents an interval development since the prior",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'new' and 'prior' are descriptive of the finding not new-report or open-prior commands",
+    "category": "adversarial-nearmiss"
+  },
+  {
+    "text": "the findings are uh stable postsurgical changes no acute abnormality um actually generate the impression",
+    "label": "mixed",
+    "intent": "generate_impression",
+    "commandSpan": "generate the impression",
+    "note": "filler-led self-redirect; dictation precedes, 'uh'/'um' fillers, 'actually' marks pivot to command",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "open the uh patel no the rossi case from this morning",
+    "label": "command",
+    "intent": "open_study",
+    "commandSpan": "open the rossi case",
+    "note": "self-correction mid-name patel to rossi; command span uses corrected target, repaired filler dropped",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "small pleural effusion on the right side and then um scratch that go to the next image",
+    "label": "mixed",
+    "intent": "next_image",
+    "commandSpan": "go to the next image",
+    "note": "dictation then 'scratch that' abandons, command follows; do not delete the prior finding, just redirect",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "comparison is made with the prior study from uh march wait april and the navigate to the comparison tab",
+    "label": "command",
+    "intent": "open_comparison",
+    "commandSpan": "navigate to the comparison tab",
+    "note": "date self-correction march to april embedded; trailing command after disfluent 'and the'",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "no evidence of um of pulmonary embolism uh save the report as a draft for now",
+    "label": "mixed",
+    "intent": "save_draft",
+    "commandSpan": "save the report as a draft",
+    "note": "repeated 'of of' stutter in dictation, then filler-led save command",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "lets see the the lung windows or actually no the bone windows please",
+    "label": "command",
+    "intent": "set_window_preset",
+    "commandSpan": "the bone windows",
+    "note": "word repetition 'the the', then 'actually no' corrects lung to bone window preset",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "measuring the lesion at uh about three point two centimeters um add that to the findings",
+    "label": "mixed",
+    "intent": "insert_into_findings",
+    "commandSpan": "add that to the findings",
+    "note": "measurement dictation with hesitation, then command to insert into findings section",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "go back to the previous uh patient i mean previous series",
+    "label": "command",
+    "intent": "previous_series",
+    "commandSpan": "go back to the previous series",
+    "note": "self-correction 'patient' to 'series' via 'i mean'; corrected target is series",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "the liver is uh is unremarkable spleen normal okay um delete the last sentence",
+    "label": "mixed",
+    "intent": "delete_last_sentence",
+    "commandSpan": "delete the last sentence",
+    "note": "dictation with 'is is' stutter then editing command after 'okay um'",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "can you uh zoom into the no wait zoom out a bit on the axial view",
+    "label": "command",
+    "intent": "zoom_out",
+    "commandSpan": "zoom out a bit on the axial view",
+    "note": "self-correction zoom in to zoom out via 'no wait'; corrected intent is zoom out",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "impression um one degenerative changes two uh you know what start a new paragraph",
+    "label": "mixed",
+    "intent": "new_paragraph",
+    "commandSpan": "start a new paragraph",
+    "note": "numbered dictation interrupted, 'you know what' filler pivots to formatting command",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "pull up the chest xray from uh the seventh no the fifth of june",
+    "label": "command",
+    "intent": "open_study",
+    "commandSpan": "pull up the chest xray from the fifth of june",
+    "note": "date self-correction seventh to fifth; corrected date kept in command span",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "mild cardiomegaly is noted uh hmm send this to doctor uh nguyen for review",
+    "label": "mixed",
+    "intent": "share_report",
+    "commandSpan": "send this to doctor nguyen for review",
+    "note": "finding then thinking filler 'hmm', share command with hesitation before recipient name",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "switch to the uh sagittal sorry the coronal plane",
+    "label": "command",
+    "intent": "change_plane",
+    "commandSpan": "switch to the coronal plane",
+    "note": "self-correction sagittal to coronal via 'sorry'; corrected plane is coronal",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "no acute intracranial um abnormality is seen and uh lets go ahead and sign the report",
+    "label": "mixed",
+    "intent": "sign_report",
+    "commandSpan": "sign the report",
+    "note": "negative finding dictation then filler-padded finalize command 'lets go ahead and sign'",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "increase the uh brightness no the contrast on this slice",
+    "label": "command",
+    "intent": "adjust_contrast",
+    "commandSpan": "increase the contrast on this slice",
+    "note": "self-correction brightness to contrast via 'no'; corrected target is contrast adjustment",
+    "category": "disfluent-pauses"
+  },
+  {
+    "text": "previsous case",
+    "label": "command",
+    "intent": "previous_case",
+    "commandSpan": "previsous case",
+    "note": "homophone-ish split mishear of 'previous case'; matcher must fuzzy-match 'previsous' to 'previous'",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "fine dings for okafor",
+    "label": "command",
+    "intent": "begin_findings",
+    "commandSpan": "fine dings",
+    "note": "word-boundary error: 'findings' heard as two words 'fine dings'; metaphone collapses to begin_findings trigger",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "sined and next",
+    "label": "command",
+    "intent": "sign_and_next",
+    "commandSpan": "sined and next",
+    "note": "destructive intent: 'signed and next' mis-spelled as 'sined'; commit gate should require stable prefix despite mishear",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "next steady",
+    "label": "command",
+    "intent": "next_case",
+    "commandSpan": "next steady",
+    "note": "'next study' heard as 'next steady'; navigation tier, optimistic commit",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "pull a chen case",
+    "label": "command",
+    "intent": "open_case",
+    "commandSpan": "pull a chen",
+    "note": "'pull up Chen' degraded to 'pull a chen'; takesName slot patient=Chen, 'up' dropped",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "jenna rate the impression",
+    "label": "command",
+    "intent": "generate_impression",
+    "commandSpan": "jenna rate",
+    "note": "'generate' mangled to 'jenna rate'; phonetic match to generate_impression, NOT a patient name",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "compair with pryor",
+    "label": "command",
+    "intent": "compare_prior",
+    "commandSpan": "compair with pryor",
+    "note": "double mishear 'compare with prior' to 'compair with pryor'; both tokens off",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "scratched at",
+    "label": "command",
+    "intent": "undo",
+    "commandSpan": "scratched at",
+    "note": "'scratch that' heard as 'scratched at'; undo trigger via fuzzy match",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "stahp dictation",
+    "label": "command",
+    "intent": "stop_dictation",
+    "commandSpan": "stahp dictation",
+    "note": "'stop' rendered as 'stahp' (vowel distortion); dictation-control",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "begin impressionism",
+    "label": "command",
+    "intent": "begin_impression",
+    "commandSpan": "begin impressionism",
+    "note": "STT overshoots to a longer dictionary word 'impressionism'; prefix still matches begin_impression",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "there is a small focus of oligo dendro glioma in the left frontal lobe",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "hard clinical term 'oligodendroglioma' fragmented by STT; pure findings dictation, no command",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "mild spondylo lysthesis at l four l five with no acute fracture",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'spondylolisthesis' mis-segmented; 'L4 L5' spoken-form 'l four l five'; dictation only",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "no new mediastinum and the cardiomediastinal silhouette is unremarkable",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'pneumomediastinum' mis-transcribed as 'no new mediastinum'; risk of false negation-command parse, true intent is dictation",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "the liver demonstrates steato hepatitis without focal legion",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "'steatohepatitis' split; 'lesion' to 'legion' homophone; dictation",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "fine dings show no pneumothorax then sign off",
+    "label": "mixed",
+    "intent": "sign_and_next",
+    "commandSpan": "sign off",
+    "note": "leading 'fine dings'=begin_findings mishear, dictation body, trailing 'sign off' is the destructive command this item is labeled for; commandSpan marks the destructive trigger",
+    "category": "stt-mishears"
+  },
+  {
+    "text": "the patient was asked to sign the consent form prior to the study",
+    "label": "dictation",
+    "intent": "",
+    "commandSpan": "",
+    "note": "adversarial: contains 'sign' and 'prior' and 'study' tokens but is narrative; must NOT fire sign_and_next/previous_case/compare_prior",
+    "category": "stt-mishears"
+  }
+]

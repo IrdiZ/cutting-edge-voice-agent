@@ -1,0 +1,17 @@
+{
+  "name": "radiology-voice-cockpit-bench",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase-0 throwaway measurement harness for the radiology voice cockpit. Turns disputed latency/accuracy numbers into measured facts. NOT product code — optimize for fast iteration.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "example": "tsx experiments/stt-bakeoff.ts",
+    "exp:bakeoff": "tsx experiments/stt-bakeoff.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}
