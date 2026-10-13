@@ -26,7 +26,7 @@ export const SCRIPT: Prompt[] = [
   { id: 'c10', say: 'undo that', kind: 'command', intent: 'undo', scope: 'dictating_findings' },
   { id: 'c11', say: 'sign and next', kind: 'command', intent: 'sign_and_next', scope: 'case_open' },
   { id: 'c12', say: 'sign off', kind: 'command', intent: 'sign_and_next', scope: 'case_open' },
-  // ── dictation (radiology prose; must NOT fire a command — incl. trap words) ──
+  // ── dictation (specialist prose; must NOT fire a command — incl. trap words) ──
   { id: 'd01', say: 'there is a small nodule in the right upper lobe', kind: 'dictation', scope: 'dictating_findings' },
   { id: 'd02', say: 'no acute intracranial abnormality the ventricles are symmetric', kind: 'dictation', scope: 'dictating_findings' },
   { id: 'd03', say: 'the patient signed consent prior to the examination', kind: 'dictation', scope: 'dictating_findings' },

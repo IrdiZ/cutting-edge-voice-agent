@@ -1,6 +1,6 @@
 // Word-error-rate + helpers for the STT bake-off. Normalizes casing/punctuation so
 // "Next, case." and "next case" compare equal, and folds number-words to digits so
-// "three nodules" == "3 nodules" (correct radiology numerals aren't counted as errors).
+// "three nodules" == "3 nodules" (correct spoken numerals aren't counted as errors).
 
 // Whole-token number-word -> digit folding (0–20 covers the script's numerals). Only
 // applied to entire tokens, so "someone"/"oneself" are never rewritten.

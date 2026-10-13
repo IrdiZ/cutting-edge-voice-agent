@@ -1,6 +1,6 @@
 # Phase-0 bench
 
-Throwaway-friendly measurement harness for the radiology voice cockpit. Its only
+Throwaway-friendly measurement harness for the voice cockpit. Its only
 job (per [`../PHASE-0-BENCH.md`](../PHASE-0-BENCH.md)) is to turn the disputed
 numbers in [`../research/OPEN-QUESTIONS.md`](../research/OPEN-QUESTIONS.md) into
 **measured facts** on real audio + real hardware, and flip 🔴 tickets to ✅.

@@ -1,6 +1,6 @@
 // Deterministic synthetic dataset generator (no RNG, no real PHI).
 //
-// Produces a mock radiology worklist + a command corpus with multiple phrasings,
+// Produces a mock worklist + a command corpus with multiple phrasings,
 // pure-dictation samples (with hard clinical terms for WER), and adversarial
 // negatives (dictation that reads like a command — drives the false-accept
 // measurement that PHASE-0-BENCH.md §D weights heaviest).

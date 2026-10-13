@@ -36,7 +36,7 @@ const VAD_MS = 1;
 //    set near the literature floor (real-audio, weaker-CPU end), NOT the vendor headline.
 //  - endpointMs: the silence wait before `isFinal` — the dominant, hardware-independent
 //    term (F1/F2). Anything that waits for the final pays it; fire-on-partial does not.
-// All remain PLACEHOLDER (`*PH`) until measured locally on real radiologist audio.
+// All remain PLACEHOLDER (`*PH`) until measured locally on real user audio.
 const ENGINES: SttAdapter[] = [
   // A2/A3 bench-only: Parakeet-TDT-0.6B is OFFLINE (no streaming first-token latency).
   // The 80–160 ms figure is the *120M EOU* model on GPU/clean-TTS; shown here as an
