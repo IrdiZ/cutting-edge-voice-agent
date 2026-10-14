@@ -10,9 +10,14 @@ the pipeline, cockpit, or HUD.
 
 ```sh
 npm install
+npm run setup        # one time: fetches the git-ignored model files (about 175 MB download)
 npm run dev          # → http://localhost:5173
-npm run typecheck    # tsc --noEmit, must be clean
+npm run check        # typecheck + separator evaluation + unit tests
 ```
+
+`npm run setup` copies the Silero VAD model out of `node_modules` and downloads the
+sherpa-onnx WebAssembly bundle (release v1.13.2, `.wasm` and `.data`) into `public/`. It needs
+`sh` and `curl`. On Windows, run it from Git Bash or WSL.
 
 Open in **Chrome** (WebGPU). Pick the STT engine in the top-right selector:
 
@@ -24,9 +29,9 @@ Open in **Chrome** (WebGPU). Pick the STT engine in the top-right selector:
 No mic? Use the **Simulate** buttons — they drive the same pipeline with synthetic
 on-device timing.
 
-## Handoff (2026-06-26): contextual biasing + separator/dictation fixes
+## Status notes (2026-06-26): contextual biasing and separator fixes
 
-State after a live mic-testing session on the M5 Pro. The gate (`npm run check`) is green:
+State after a live mic-testing session on an Apple M5 Pro. The gate (`npm run check`) is green:
 **37 unit tests, FAR 0% (case_open + dictating), 0 destructive false-fires, recall 82.4%**.
 Those invariants must stay green on any future edit.
 
@@ -90,11 +95,11 @@ text-hotwords were off. Now enabled WITHOUT repacking `.data`:
 
 ### Next milestones (bigger impact than anything left on names)
 
-- **Recall sprint:** 0.824 -> 0.95 at FAR=0 (per `../EXECUTION-PLAN-2026-06-10.md` S4).
-- **Point C, Smart Turn EOU** (the fix for trailing-command latency): deep-research found a browser
-  path via `onnx-community/smart-turn-v3-ONNX` (int8, ~8 MB) on onnxruntime-web. OPEN question to
-  resolve empirically: input is raw PCM `[1,128000]` (Gemini) vs log-mel `input_features [1,1000,80]`
-  (ChatGPT) - check the HF repo before wiring.
+- **Recall sprint:** 0.824 -> 0.95 at FAR=0 (goal: 0 false triggers on dictation).
+- **Point C, Smart Turn end-of-utterance detection** (the fix for trailing-command latency): a
+  browser path may exist via `onnx-community/smart-turn-v3-ONNX` (int8, about 8 MB) on onnxruntime-web.
+  Open question: the model input is either raw PCM `[1,128000]` or log-mel `input_features [1,1000,80]`.
+  Check the Hugging Face repo before wiring it in.
 
 Manual test script: see `MANUAL-TEST-PLAN.md`.
 
@@ -125,7 +130,7 @@ Whisper-tiny.en via transformers.js, fp32, WebGPU — observed end-to-end:
 | inference — cold | ~1.39 s | first pass (11 s JFK clip) |
 | inference — warm | ~0.44 s | **RTF ≈ 0.04** (~25× real-time) |
 
-**Takeaway (confirms `research/WEB-VERIFICATION.md` F1/F2):** STT *compute* is not
+**Takeaway (confirms `docs/research/WEB-VERIFICATION.md` F1/F2):** STT *compute* is not
 the bottleneck on Apple Silicon. For the short command utterances we fire on, the
 per-pass cost is a small fraction of the warm number — the dominant term is the
 **endpoint wait**, not the model.
@@ -156,8 +161,9 @@ Zipformer transducer compiled to WASM: `acceptWaveform()` + a `decode()` loop th
 
 - **No emscripten build needed** — uses the k2-fsa **pre-built** bundle vendored
   under `public/sherpa/` (`sherpa-onnx-asr.js`, `sherpa-onnx-wasm-main-asr.{js,wasm,data}`).
-  Re-download: the `sherpa-onnx-wasm-simd-vX-en-asr-zipformer.tar.bz2` asset from
-  https://github.com/k2-fsa/sherpa-onnx/releases (the `.data` ~182 MB is git-ignored).
+  Fetch the large files with `npm run setup`. It downloads the
+  `sherpa-onnx-wasm-simd-v1.13.2-en-asr-zipformer.tar.bz2` asset from
+  https://github.com/k2-fsa/sherpa-onnx/releases (the `.data` file is about 182 MiB and is git-ignored).
 - **Needs cross-origin isolation** — the WASM uses pthreads/SharedArrayBuffer, so
   `vite.config.ts` sets `COOP: same-origin` + `COEP: credentialless` (credentialless
   so the Whisper HF-CDN fetch still works). If sherpa fails to init, hard-reload so
@@ -173,7 +179,7 @@ first recognized word), so they show decode/claim latency, not true mouth-to-com
 ## B8 — command-vs-dictation separator (SGFM-Sep) ✓
 
 `src/separator/` replaces the old naive mode-gate. Design + tournament + labeled
-corpus came from a 43-agent workflow (`../research/B8-SEPARATOR-DESIGN.md`).
+corpus came from the design work in [`../docs/research/B8-SEPARATOR-DESIGN.md`](../docs/research/B8-SEPARATOR-DESIGN.md).
 
 - **ScopeFsm reachability hard gate** (`scopeFsm.ts`): each command is reachable
   only in certain app scopes. `sign_and_next` is reachable in `case_open`/`signing`

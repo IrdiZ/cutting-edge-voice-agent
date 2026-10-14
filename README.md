@@ -1,68 +1,97 @@
 # Voice Cockpit
 
-Hands-free voice control for a web app. Speech recognition runs on the device, in the browser, so the audio never leaves the machine. Commands fire on partial transcripts, before the speaker has finished the sentence.
+Hands-free voice control for web apps. Speech recognition runs on the device, in the browser. Commands fire on partial transcripts.
 
-This repository holds a working browser prototype and the research behind it.
+**Status:** research prototype. It runs in the browser against a mock screen. It is not connected to a real application, and it is not production software.
 
-## The idea
+<!-- demo gif: screen recording of the prototype in Chrome. Speak "open the next case", then dictate a sentence that contains the word "sign", and show that only the first one fires a command. Keep the latency display visible. -->
 
-A command is not a transcript. Most voice interfaces wait for the speaker to go silent, then act on the final text. That silence costs more time than any faster model can win back. This prototype acts on the streaming partial text as soon as it confidently matches a command.
+## What it does
 
-The hard part is doing that while the user is also dictating free text. The system listens all the time, with no wake word, so it has to tell "sign this" the command apart from "sign" as a word in a sentence.
+Most voice interfaces wait for silence, then act on the final text. That wait costs more time than a faster model can win back. This prototype acts on the streaming partial text as soon as it matches a command with enough confidence.
 
-## What works today
+The hard part is doing this while the user also dictates free text. The microphone is always on, and there is no wake word. The prototype must tell the command "sign this" apart from the word "sign" inside a sentence.
 
-The prototype in [`prototype/`](prototype/) runs in Chrome:
+What works today:
 
-- live microphone, voice activity detection, and streaming speech-to-text in the browser (sherpa-onnx Zipformer on WebAssembly, or Whisper on WebGPU)
-- a command decoder that matches partial transcripts
-- a separator that keeps commands and dictation apart, using what is on screen as context
-- a mock screen that reacts to the commands, and a latency display for each stage
-- a rule for destructive commands: they only become pending from the stream, and need a separate spoken "confirm"
+- Live microphone input, voice activity detection and streaming speech-to-text in the browser. The engine is sherpa-onnx Zipformer on WebAssembly. Whisper on WebGPU and the Chrome Web Speech API are also available.
+- A command decoder that matches partial transcripts.
+- A separator that keeps commands and dictation apart. It uses the app state as context. A command can only fire in the states where it makes sense.
+- A mock screen that reacts to the commands, and a latency display for each stage.
+- A rule for destructive commands. They never fire from the stream. They wait for a separate spoken or clicked "confirm".
 
-## What is measured
+## Quick start
 
-`npm run check` in `prototype/` runs the type check, the evaluation and the unit tests.
-
-| Measure | Result |
-|---|---|
-| False triggers on dictation (53 dictation items of a 128-utterance test set) | 0% |
-| Destructive commands fired by mistake | 0 |
-| Command recall | 82.4% |
-| Unit tests | 37 |
-
-The latency figures in the research files are estimates from published sources. They are not measurements of this prototype.
-
-## What is designed but not built
-
-Cross-partial commit stability, semantic end-of-turn detection, the embedding and LLM fallback layers, and WebRTC transport for a cloud dictation lane. See [ARCHITECTURE.md](ARCHITECTURE.md), which marks each part as built or planned.
-
-## Run it
+You need Node.js 22 or newer, `sh`, `curl` and Chrome.
 
 ```sh
 cd prototype
 npm install
-npm run dev      # http://localhost:5173, open in Chrome
-npm run check    # typecheck + evaluation + tests
+npm run setup    # one time: downloads about 175 MB of model files
+npm run dev      # open http://localhost:5173 in Chrome
 ```
 
-No microphone? The Simulate buttons drive the same pipeline with synthetic timing.
+Click "Start mic" and allow microphone access. If you have no microphone, use the Simulate buttons. They drive the same pipeline with synthetic timing.
 
-## Where the files are
+To run the checks (type check, evaluation, unit tests):
 
-| Path | What |
+```sh
+npm run check
+```
+
+On Windows, run `npm run setup` from Git Bash or WSL.
+
+## How it works
+
+```
+mic -> VAD -> streaming STT -> partial transcript
+                                     |
+                              command decoder (match on every partial)
+                                     |
+                        separator (is this a command or dictation?)
+                                     |
+              +----------------------+----------------------+
+        navigation / control                        destructive command
+        fires at once                          waits for "confirm"
+                                     |
+                         mock screen + latency display
+```
+
+The speech engine sits behind one adapter interface. You can swap the engine without changing the decoder or the screen. The separator uses a state machine. Each command is reachable only in some app states, so dictation text cannot fire a destructive command.
+
+Results on the included test set (`npm run check` in `prototype/`):
+
+| Measure | Result |
 |---|---|
-| [`prototype/`](prototype/) | the runnable app, its tests and its evaluation set |
-| [`bench/`](bench/) | a small harness for comparing speech-to-text engines |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | the target design and the latency budget per stage |
-| [`COMMAND-REGISTRY.md`](COMMAND-REGISTRY.md) | how commands, synonyms and confirmations are declared |
-| [`RISKS.md`](RISKS.md) | latency, privacy and mis-fire risks, with mitigations |
-| [`00-INDEX.md`](00-INDEX.md), [`research/`](research/) | the research dossier, with sources |
+| False triggers on dictation (53 dictation items in a set of 128 written utterances) | 0% |
+| Destructive commands fired by mistake | 0 |
+| Command recall | 82.4% |
+| Unit tests | 37 passing |
+
+The test set is written text, not recorded audio. The latency figures in [`docs/research/`](docs/research/) are estimates from published sources. They are not measurements of this prototype.
+
+## Limitations
+
+- It is a prototype. It controls a mock screen only.
+- The decoder has a fixed list of commands and a small test vocabulary. Recall is 82.4%, so it misses some phrasings.
+- The streaming engine is English only. It needs a model download of about 190 MB.
+- The Web Speech option sends microphone audio to a cloud service. Use the on-device engines if audio must stay on the machine.
+- These parts are designed but not built: stability checks across partials, semantic end-of-turn detection, embedding and LLM fallback layers, and WebRTC transport for a cloud dictation lane. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), which states what is built and what is only designed.
+- The prototype targets Chrome. Other browsers are not tested.
+
+## Repository layout
+
+| Path | Content |
+|---|---|
+| [`prototype/`](prototype/) | The runnable app, its tests and its evaluation set |
+| [`bench/`](bench/) | A small harness for comparing speech-to-text engines |
+| [`docs/`](docs/) | Architecture, command registry, risks and build plan |
+| [`docs/research/`](docs/research/) | Research notes with sources, and an index |
 
 ## Background
 
-The first use case was a reporting screen for specialists who dictate all day and want their hands free. The test vocabulary and some research notes still reflect that. The engine does not depend on it: commands, vocabulary and the screen model are configuration.
+The first use case was a reporting screen for clinicians who dictate all day and want their hands free. Some test phrases and research notes still reflect that. The engine does not depend on it. Commands, vocabulary and the screen model are configuration.
 
 ## License
 
-No license has been chosen yet. Please ask before reusing the code.
+MIT. See [LICENSE](LICENSE).
