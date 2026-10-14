@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voice Cockpit — Signal Flow</title>
+<style>
+  :root {
+    --bg: #06090e;
+    --panel: #0f1822;
+    --panel2: #14202d;
+    --line: #213040;
+    --line2: #2f4658;
+    --ink: #eaf2fa;
+    --mut: #8fa6bc;
+    --dim: #5d7governs;
+    --dim: #5d748b;
+    --cmd: #38bdf8;
+    --dict: #a78bfa;
+    --teal: #2dd4bf;
+    --ok: #34d399;
+    --warn: #fb7185;
+    --gold: #fbbf24;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: var(--sans); color: var(--ink);
+    background:
+      radial-gradient(1100px 600px at 15% -10%, rgba(56,189,248,.10), transparent 60%),
+      radial-gradient(1000px 600px at 90% 110%, rgba(167,139,250,.08), transparent 60%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  /* faint grid backdrop — oscilloscope feel */
+  body::before {
+    content:""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 40%, transparent 100%);
+  }
+  .wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 34px 26px 60px; }
+
+  header { text-align: center; margin-bottom: 12px; }
+  .eyebrow { font: 600 11.5px/1 var(--mono); letter-spacing: .26em; text-transform: uppercase; color: var(--teal); }
+  h1 { font-size: clamp(24px, 3.6vw, 38px); margin: 12px 0 8px; letter-spacing: -.02em;
+       background: linear-gradient(100deg, #fff, var(--cmd) 55%, var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { color: var(--mut); font-size: 14px; max-width: 640px; margin: 0 auto; }
+  .sub b { color: var(--ink); }
+
+  /* live caption / readout bar */
+  .readout {
+    display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap;
+    margin: 22px auto 30px; max-width: 880px; padding: 12px 18px;
+    border: 1px solid var(--line2); border-radius: 12px;
+    background: linear-gradient(180deg, var(--panel2), var(--panel));
+    font: 500 13px/1 var(--mono);
+  }
+  .readout .rec { display: inline-flex; align-items: center; gap: 8px; color: var(--warn); }
+  .readout .rec b { width: 9px; height: 9px; border-radius: 50%; background: var(--warn); box-shadow: 0 0 10px var(--warn); animation: blink 1.4s infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .readout .said { color: var(--ink); }
+  .readout .said .interim { color: var(--cmd); }
+  .readout .lat { color: var(--teal); }
+  .readout .lat b { color: var(--ink); font-weight: 700; }
+
+  /* ---------- the flow ---------- */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .stage-row { display: flex; align-items: stretch; gap: 0; justify-content: center; }
+
+  /* a node */
+  .node {
+    position: relative; flex: 1; min-width: 0;
+    background: linear-gradient(180deg, var(--panel2), var(--panel));
+    border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px;
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+  }
+  .node .ico { font-size: 19px; line-height: 1; }
+  .node .tag { display:block; font: 600 9.5px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--dim); margin: 9px 0 5px; }
+  .node h3 { margin: 0 0 4px; font-size: 13.5px; letter-spacing: .01em; }
+  .node .meta { color: var(--mut); font-size: 11.5px; line-height: 1.45; }
+  .node .ms { font: 600 10.5px/1 var(--mono); color: var(--cmd); margin-top: 7px; display: inline-block; }
+  .node code { font-family: var(--mono); font-size: 10.5px; color: var(--teal); }
+
+  /* accent variants */
+  .node.cmd { border-color: rgba(56,189,248,.32); }
+  .node.dict { border-color: rgba(167,139,250,.32); }
+  .node.warn { border-color: rgba(251,113,133,.35); }
+  .node.teal { border-color: rgba(45,212,191,.35); }
+
+  /* the "active" pulse that sweeps the chain */
+  .node.fire {
+    border-color: var(--cmd);
+    box-shadow: 0 0 0 1px var(--cmd), 0 0 26px -4px var(--cmd);
+    transform: translateY(-3px);
+  }
+  .node.teal.fire { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), 0 0 26px -4px var(--teal); }
+  .node.warn.fire { border-color: var(--warn); box-shadow: 0 0 0 1px var(--warn), 0 0 26px -4px var(--warn); }
+  .node.dict.fire { border-color: var(--dict); box-shadow: 0 0 0 1px var(--dict), 0 0 26px -4px var(--dict); }
+
+  /* vertical connector with traveling pulse */
+  .conn { position: relative; height: 40px; display: flex; justify-content: center; }
+  .conn::before { content:""; position: absolute; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(var(--line2), var(--line2)); border-radius: 2px; }
+  .conn .pulse { position: absolute; top: -4px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cmd); box-shadow: 0 0 12px 2px var(--cmd);
+    animation: drop 2.6s cubic-bezier(.5,0,.5,1) infinite; }
+  .conn .label { position: absolute; left: 52%; top: 50%; transform: translateY(-50%);
+    font: 500 10px/1.3 var(--mono); color: var(--dim); white-space: nowrap; }
+  @keyframes drop { 0% { top:-4px; opacity:0; } 12%{opacity:1;} 88%{opacity:1;} 100% { top: 100%; opacity:0; } }
+
+  /* mic waveform */
+  .mic-wrap { display:flex; flex-direction:column; align-items:center; gap: 10px; margin-bottom: 4px; }
+  .mic-node { display:flex; align-items:center; gap:16px; padding: 16px 26px; border-radius: 16px;
+    border: 1px solid rgba(251,113,133,.3); background: linear-gradient(180deg, rgba(251,113,133,.06), transparent); }
+  .mic-node .who { font-size: 13px; color: var(--mut); }
+  .mic-node .who b { color: var(--ink); display:block; font-size: 15px; }
+  .wave { display:flex; align-items:center; gap: 3px; height: 38px; }
+  .wave i { width: 3px; border-radius: 3px; background: linear-gradient(var(--warn), var(--gold)); animation: eq 1s ease-in-out infinite; }
+  .wave i:nth-child(1){animation-delay:0s} .wave i:nth-child(2){animation-delay:.1s}
+  .wave i:nth-child(3){animation-delay:.2s} .wave i:nth-child(4){animation-delay:.3s}
+  .wave i:nth-child(5){animation-delay:.15s} .wave i:nth-child(6){animation-delay:.25s}
+  .wave i:nth-child(7){animation-delay:.05s} .wave i:nth-child(8){animation-delay:.35s}
+  .wave i:nth-child(9){animation-delay:.2s} .wave i:nth-child(10){animation-delay:.1s}
+  .wave i:nth-child(11){animation-delay:.3s} .wave i:nth-child(12){animation-delay:.18s}
+  @keyframes eq { 0%,100%{height:8px;} 50%{height:34px;} }
+
+  /* PHI band wrapper */
+  .phi { position: relative; border: 1px dashed rgba(45,212,191,.4); border-radius: 18px;
+    padding: 22px 18px 18px; margin: 6px 0; background: rgba(45,212,191,.025); }
+  .phi-tab { position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    font: 700 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--teal);
+    background: var(--bg); padding: 4px 14px; border-radius: 7px; border: 1px dashed rgba(45,212,191,.4); white-space: nowrap; }
+
+  /* the branch (separator outputs) */
+  .branch { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .branch .col { display:flex; flex-direction: column; align-items: center; }
+  .branch .blabel { font: 600 10px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 10px; }
+  .branch .col.c1 .blabel { color: var(--cmd); }
+  .branch .col.c2 .blabel { color: var(--warn); }
+  .branch .col.c3 .blabel { color: var(--dict); }
+  .branch .node { width: 100%; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin-top: 30px; }
+  .chip { display:inline-flex; align-items:center; gap:7px; font:500 11.5px/1 var(--sans);
+    padding: 6px 11px; border-radius: 999px; background: var(--panel); border:1px solid var(--line); color: var(--mut); }
+  .chip .d { width:8px; height:8px; border-radius:50%; }
+
+  footer { text-align:center; margin-top: 34px; color: var(--dim); font-size: 11.5px; font-family: var(--mono); }
+
+  @media (max-width: 760px) {
+    .branch { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Voice Cockpit · runtime signal flow</div>
+    <h1>How sound becomes an action</h1>
+    <p class="sub">One always-on mic stream → on-device, PHI-safe command lane. The system fires the
+    instant a <b>partial transcript</b> confidently matches — <b>before the user stops talking</b>.</p>
+  </header>
+
+  <div class="readout">
+    <span class="rec"><b></b> LIVE · always-on</span>
+    <span class="said">“<span class="interim">open the Anderson case</span>” → <span style="color:var(--ok)">open_case ✓</span></span>
+    <span class="lat">mouth → command <b>~80–150 ms</b></span>
+  </div>
+
+  <div class="flow">
+
+    <!-- MIC -->
+    <div class="mic-wrap">
+      <div class="mic-node">
+        <span style="font-size:26px">🩻</span>
+        <div class="who"><b>User</b> continuous natural speech</div>
+        <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <div class="conn"><div class="pulse" style="background:var(--warn);box-shadow:0 0 12px 2px var(--warn);animation-delay:0s"></div><span class="label">analog audio</span></div>
+
+    <!-- PHI on-device band -->
+    <div class="phi">
+      <span class="phi-tab">⊘ on-device · PHI never leaves the machine</span>
+
+      <!-- capture + VAD -->
+      <div class="stage-row" style="gap:16px">
+        <div class="node fire" id="n-mic">
+          <span class="ico">🎙️</span>
+          <span class="tag">capture · audio/mic.ts</span>
+          <h3>getUserMedia → 16 kHz PCM frames</h3>
+          <div class="meta">mono Float32 @ 16 kHz (what Whisper/Moonshine expect — no resampling)</div>
+          <span class="ms">~20 ms frame</span>
+        </div>
+        <div class="node teal" id="n-vad">
+          <span class="ico">📊</span>
+          <span class="tag">segment · audio/vad.ts</span>
+          <h3>Silero VAD</h3>
+          <div class="meta">clean speech onset / offset (v5 via onnxruntime-web). Drops silence before STT.</div>
+          <span class="ms">&lt;1 ms / 32 ms chunk</span>
+        </div>
+      </div>
+
+      <div class="conn"><div class="pulse" style="animation-delay:.3s"></div><span class="label">speech frames</span></div>
+
+      <!-- STT -->
+      <div class="stage-row">
+        <div class="node cmd" id="n-stt">
+          <span class="ico">📝</span>
+          <span class="tag">transcribe · adapters/ (pluggable SttAdapter seam)</span>
+          <h3>Streaming on-device STT → cumulative partials</h3>
+          <div class="meta">swappable behind one interface: <code>webspeech</code> (cloud · M1) · <code>ondevice</code> Whisper-tiny WebGPU (M3a) · <code>sherpa</code> online Zipformer WASM — true causal streaming (M3b). Emits a growing hypothesis every few frames, not just on silence.</div>
+          <span class="ms">first partial ~30–80 ms</span>
+        </div>
+      </div>
+
+      <div class="conn"><div class="pulse" style="animation-delay:.6s"></div><span class="label">partial: “open the Ander…”</span></div>
+
+      <!-- decode -->
+      <div class="stage-row" style="gap:16px">
+        <div class="node cmd" id="n-dec">
+          <span class="ico">⚙️</span>
+          <span class="tag">decode · decoder.ts</span>
+          <h3>L1 command match</h3>
+          <div class="meta">ordered-subsequence match over the reachable command set → intent + trigger span + coverage confidence.</div>
+          <span class="ms">0.01–5 ms</span>
+        </div>
+        <div class="node cmd" id="n-slot">
+          <span class="ico">🔤</span>
+          <span class="tag">resolve · slots.ts</span>
+          <h3>Name slot resolver</h3>
+          <div class="meta">STT mangles names (“Patel”→“the tell”). Edit-distance + phonetic skeleton over <b>today's worklist</b> → “Anderson”.</div>
+          <span class="ms">µs</span>
+        </div>
+      </div>
+
+      <div class="conn"><div class="pulse" style="animation-delay:.9s"></div><span class="label">candidate intent + confidence</span></div>
+
+      <!-- SEPARATOR -->
+      <div class="stage-row">
+        <div class="node teal" id="n-sep">
+          <span class="ico">🛡️</span>
+          <span class="tag">separate · separator/ — the load-bearing safety</span>
+          <h3>SGFM-Sep · command vs dictation</h3>
+          <div class="meta"><b>Stage 0 — ScopeFsm reachability gate:</b> app state is an FSM; only in-scope commands are even scored. While dictating, <code>sign</code> / <code>next</code> are <i>unreachable</i> — a stray “sign” in findings prose is unfireable by construction. Then coverage confidence buries embedded hits, and routing is per cost-tier.</div>
+          <span class="ms" style="color:var(--teal)">sub-ms · false-accept 34% → 0% on the 128-utterance corpus</span>
+        </div>
+      </div>
+
+      <div class="conn"><div class="pulse" style="background:var(--teal);box-shadow:0 0 12px 2px var(--teal);animation-delay:1.2s"></div><span class="label">routed by tier ↓</span></div>
+
+      <!-- BRANCH -->
+      <div class="branch">
+        <div class="col c1">
+          <div class="blabel">◀ navigation / control</div>
+          <div class="node cmd fire" id="n-cmd">
+            <span class="ico">⚡</span>
+            <span class="tag">commit · pipeline.ts</span>
+            <h3>Fire on partial</h3>
+            <div class="meta">low-cost (open / next / begin findings) commits on local-agreement — <b>fires before you stop talking</b>.</div>
+          </div>
+        </div>
+        <div class="col c2">
+          <div class="blabel">destructive ⚠</div>
+          <div class="node warn" id="n-pend">
+            <span class="ico">🔒</span>
+            <span class="tag">guard · pipeline.ts</span>
+            <h3>pending → confirm</h3>
+            <div class="meta"><code>sign_and_next</code> <b>never</b> fires from the stream. Requires an explicit confirm (button / isolated “confirm”). Medico-legal guard.</div>
+          </div>
+        </div>
+        <div class="col c3">
+          <div class="blabel">dictation ▶</div>
+          <div class="node dict" id="n-dict">
+            <span class="ico">📄</span>
+            <span class="tag">accumulate</span>
+            <h3>Report text</h3>
+            <div class="meta">non-command speech flows to findings / impression. Claimed command spans are subtracted (with undo log).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /PHI -->
+
+    <div class="conn"><div class="pulse" style="background:var(--teal);box-shadow:0 0 12px 2px var(--teal);animation-delay:1.5s"></div><span class="label">dispatch</span></div>
+
+    <!-- ACTION -->
+    <div class="stage-row">
+      <div class="node teal fire" id="n-act">
+        <span class="ico">🖥️</span>
+        <span class="tag">apply · cockpit.ts + hud.ts</span>
+        <h3>Cockpit reacts → page changes · latency HUD logs mouth-to-command</h3>
+        <div class="meta">worklist navigates, findings open, async impression streams, undo history tracked — all hands-free, zero-click. The HUD shows the measured capture → command time per utterance.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <span class="chip"><span class="d" style="background:var(--cmd);box-shadow:0 0 8px var(--cmd)"></span> command lane (on-device)</span>
+    <span class="chip"><span class="d" style="background:var(--teal);box-shadow:0 0 8px var(--teal)"></span> separator / action</span>
+    <span class="chip"><span class="d" style="background:var(--warn);box-shadow:0 0 8px var(--warn)"></span> destructive — confirm required</span>
+    <span class="chip"><span class="d" style="background:var(--dict);box-shadow:0 0 8px var(--dict)"></span> dictation → report text</span>
+  </div>
+
+  <footer>actual prototype data flow — mic.ts → adapters/* → decoder + separator → pipeline.ts → cockpit.ts + hud.ts</footer>
+</div>
+
+<script>
+  // Sweep the "fire" highlight along the chain so the diagram reads as a moving signal.
+  const seq = ['n-mic','n-vad','n-stt','n-dec','n-slot','n-sep','n-cmd','n-act'];
+  let i = 0;
+  function clearAll(){ document.querySelectorAll('.node.fire').forEach(n=>n.classList.remove('fire')); }
+  setInterval(()=>{
+    clearAll();
+    const el = document.getElementById(seq[i]);
+    if (el) el.classList.add('fire');
+    // briefly flash the destructive guard + dictation when separator lights up
+    if (seq[i] === 'n-sep'){ document.getElementById('n-pend').classList.add('fire'); document.getElementById('n-dict').classList.add('fire'); }
+    i = (i + 1) % seq.length;
+  }, 900);
+</script>
+</body>
+</html>

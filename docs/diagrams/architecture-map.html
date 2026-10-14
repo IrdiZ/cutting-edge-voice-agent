@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voice Cockpit — Architecture Map</title>
+<style>
+  :root {
+    --bg: #0a0e13;
+    --bg2: #0e141c;
+    --panel: #131c27;
+    --panel2: #17222f;
+    --line: #243443;
+    --line2: #2f4456;
+    --ink: #e8eff7;
+    --mut: #8da3b8;
+    --dim: #61788f;
+    --cmd: #38bdf8;     /* command lane — cyan */
+    --dict: #a78bfa;    /* dictation lane — violet */
+    --teal: #2dd4bf;
+    --ok: #34d399;      /* verified */
+    --bench: #fbbf24;   /* bench-only */
+    --warn: #fb7185;    /* caveat */
+    --phi: #f0b429;     /* PHI boundary */
+    --radius: 14px;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(45,212,191,.10), transparent 60%),
+      radial-gradient(900px 500px at 0% 0%, rgba(56,189,248,.08), transparent 55%),
+      var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ---------- header ---------- */
+  header.hero { margin-bottom: 34px; }
+  .eyebrow {
+    font: 600 12px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.4vw, 46px); line-height: 1.05; margin: 0 0 14px;
+    letter-spacing: -.02em;
+    background: linear-gradient(100deg, #fff 10%, var(--cmd) 55%, var(--teal) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--mut); max-width: 760px; font-size: 15.5px; }
+  .sub b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- legend ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    font: 500 12.5px/1 var(--sans);
+    padding: 7px 12px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--line); color: var(--mut);
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .dot.ok { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .dot.bench { background: var(--bench); box-shadow: 0 0 10px var(--bench); }
+  .dot.warn { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
+
+  /* ---------- section ---------- */
+  section { margin-top: 52px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .sec-num {
+    font: 700 13px/1 var(--mono); color: var(--bg);
+    background: linear-gradient(135deg, var(--teal), var(--cmd));
+    padding: 7px 9px; border-radius: 8px; flex: none;
+  }
+  .sec-head h2 { font-size: 21px; margin: 0; letter-spacing: -.01em; }
+  .sec-head p { margin: 4px 0 0; color: var(--mut); font-size: 13.5px; }
+
+  /* ---------- generic node card ---------- */
+  .node {
+    background: linear-gradient(180deg, var(--panel2), var(--panel));
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 16px; position: relative;
+  }
+  .node h3 { margin: 0 0 4px; font-size: 14.5px; letter-spacing: .01em; }
+  .node .meta { color: var(--mut); font-size: 12.5px; }
+  .node .tag {
+    font: 600 10.5px/1 var(--mono); letter-spacing: .04em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: 8px; display: block;
+  }
+  .ms { font: 600 11px/1 var(--mono); color: var(--cmd); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font: 600 10px/1 var(--mono); padding: 4px 7px; border-radius: 6px;
+    border: 1px solid transparent; vertical-align: middle;
+  }
+  .pill.ok   { color: var(--ok);    background: rgba(52,211,153,.10);  border-color: rgba(52,211,153,.30); }
+  .pill.bench{ color: var(--bench); background: rgba(251,191,36,.10);  border-color: rgba(251,191,36,.30); }
+  .pill.warn { color: var(--warn);  background: rgba(251,113,133,.10); border-color: rgba(251,113,133,.30); }
+
+  .arrow { text-align: center; color: var(--line2); font-size: 20px; line-height: 1; margin: 9px 0; }
+  .flowlabel { text-align:center; font: 500 11px/1 var(--mono); color: var(--dim); margin: 7px 0 2px; }
+
+  /* ---------- PHI band ---------- */
+  .phi-band {
+    border: 1px dashed rgba(240,180,41,.45); border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(240,180,41,.05), rgba(240,180,41,.015));
+    padding: 16px; position: relative; margin-top: 8px;
+  }
+  .phi-tab {
+    position: absolute; top: -11px; left: 18px;
+    font: 700 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+    color: var(--phi); background: var(--bg); padding: 3px 10px; border-radius: 6px;
+    border: 1px dashed rgba(240,180,41,.45);
+  }
+
+  /* ---------- two lane split ---------- */
+  .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .lane { border-radius: var(--radius); padding: 14px; border: 1px solid var(--line); }
+  .lane.cmd  { border-color: rgba(56,189,248,.35);  background: linear-gradient(180deg, rgba(56,189,248,.06), rgba(56,189,248,.01)); }
+  .lane.dict { border-color: rgba(167,139,250,.35); background: linear-gradient(180deg, rgba(167,139,250,.06), rgba(167,139,250,.01)); }
+  .lane-title { display: flex; align-items: center; gap: 8px; font: 700 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+  .lane.cmd  .lane-title { color: var(--cmd); }
+  .lane.dict .lane-title { color: var(--dict); }
+  .lane-sub { color: var(--mut); font-size: 11.5px; margin-bottom: 12px; }
+  .lane .node { background: rgba(255,255,255,.018); margin-bottom: 9px; }
+  .lane .node:last-child { margin-bottom: 0; }
+  .mini-arrow { text-align:center; color: var(--line2); font-size: 15px; margin: 3px 0; }
+
+  /* decoder sub-block */
+  .decoder { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 11px; background: rgba(56,189,248,.04); }
+  .decoder .row { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; padding: 3px 0; border-bottom: 1px dashed rgba(255,255,255,.06); }
+  .decoder .row:last-child { border-bottom: 0; }
+  .decoder .row span:first-child { color: var(--ink); }
+  .decoder .row span:last-child { color: var(--mut); font-family: var(--mono); font-size: 11px; white-space: nowrap; }
+
+  /* ---------- registry fan-out ---------- */
+  .source-card {
+    border: 1px solid var(--teal); border-radius: var(--radius); padding: 16px 18px;
+    background: linear-gradient(180deg, rgba(45,212,191,.10), rgba(45,212,191,.02));
+    text-align: center; max-width: 640px; margin: 0 auto;
+  }
+  .source-card .tag { color: var(--teal); }
+  .source-card code { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .fanout { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 8px; }
+  .fanout .node h3 { font-size: 12.5px; }
+  .fanout .node .meta { font-size: 11px; }
+
+  /* ---------- tree / runtime two-col ---------- */
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .tree { font-family: var(--mono); font-size: 12.5px; color: var(--mut); line-height: 1.85; }
+  .tree .b { color: var(--ink); }
+  .tree .req { color: var(--bench); }
+  .tree .destr { color: var(--warn); }
+  .tree .asy { color: var(--dict); }
+  .keymap { margin-top: 14px; font-size: 12px; color: var(--mut); }
+  .keymap div { padding: 3px 0; }
+  .keymap code { font-family: var(--mono); color: var(--teal); }
+
+  /* ---------- latency bar ---------- */
+  .latbar { display: flex; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); height: 46px; font: 600 10.5px/1 var(--mono); }
+  .latbar > div { display: flex; align-items: center; justify-content: center; color: #06121b; padding: 0 6px; text-align: center; }
+  .latbar .b1 { background: #0ea5b7; flex: 20; }
+  .latbar .b2 { background: #22b8cf; flex: 55; }
+  .latbar .b3 { background: #38bdf8; flex: 5; }
+  .latbar .b4 { background: #7dd3fc; flex: 5; }
+  .latbar .b5 { background: #bae6fd; flex: 5; }
+  .endpoint { display:flex; align-items:center; justify-content:center; background: repeating-linear-gradient(45deg, rgba(251,113,133,.22), rgba(251,113,133,.22) 8px, rgba(251,113,133,.10) 8px, rgba(251,113,133,.10) 16px); border:1px solid rgba(251,113,133,.4); color: var(--warn); flex: 30; border-radius: 8px; font: 600 11px/1 var(--mono); }
+
+  /* ---------- hardware tiers ---------- */
+  table.tiers { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13px; }
+  table.tiers th { text-align: left; font: 600 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  table.tiers td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,.05); color: var(--mut); }
+  table.tiers td b { color: var(--ink); }
+  table.tiers tr.golden td { background: rgba(45,212,191,.07); }
+  table.tiers tr.golden td b { color: var(--teal); }
+  .star { color: var(--teal); }
+
+  .callout { margin-top: 14px; border-left: 3px solid var(--warn); background: rgba(251,113,133,.06); padding: 11px 15px; border-radius: 0 10px 10px 0; font-size: 13px; color: var(--mut); }
+  .callout b { color: var(--ink); }
+  .callout.good { border-left-color: var(--ok); background: rgba(52,211,153,.06); }
+
+  footer { margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--dim); font-size: 12px; }
+  footer code { font-family: var(--mono); color: var(--mut); }
+
+  @media (max-width: 760px) {
+    .lanes, .twocol { grid-template-columns: 1fr; }
+    .fanout { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Cutting-Edge Voice → Command Agent · Phase-0 design</div>
+    <h1>Voice Cockpit</h1>
+    <p class="sub">A hands-free, zero-click reporting cockpit: continuous natural speech drives the whole page.
+    The architecture optimizes for <b>perceived</b> latency — it fires commands on <b>streaming partial transcripts</b>,
+    often <b>before the user stops talking</b>. Numbers below are the verified <b>trust-the-floor</b> values
+    from <code style="font-family:var(--mono);font-size:12px">WEB-VERIFICATION.md</code>.</p>
+
+    <div class="legend">
+      <span class="chip"><span class="dot ok"></span> Desk-verified from primary sources</span>
+      <span class="chip"><span class="dot bench"></span> Bench-only — must measure on real audio</span>
+      <span class="chip"><span class="dot warn"></span> Key caveat / risk</span>
+    </div>
+  </header>
+
+  <!-- ============ 1 · PIPELINE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <div><h2>End-to-end runtime pipeline — mouth → action</h2>
+      <p>Two lanes on one mic stream: a latency-first on-device <b>command lane</b> and an accuracy-first BAA-cloud <b>dictation lane</b>.</p></div>
+    </div>
+
+    <div class="node" style="text-align:center;border-color:var(--line2)">
+      <h3>🩻 User — continuous natural speech, hands-free, always-on mic</h3>
+    </div>
+    <div class="arrow">▼</div>
+
+    <div class="phi-band">
+      <span class="phi-tab">⊘ PHI boundary · on-device (Tier-1 CPU) · raw audio never leaves the machine</span>
+
+      <div class="node">
+        <span class="tag">capture</span>
+        <h3>AudioWorklet capture · 20 ms Opus / PCM frames</h3>
+        <div class="meta"><span class="ms">~20 ms</span> inherent frame size — unavoidable</div>
+      </div>
+      <div class="arrow">▼</div>
+
+      <div class="node" style="border-color:rgba(45,212,191,.3)">
+        <span class="tag">shared-room defense</span>
+        <h3>Speaker-enrolled target-isolation front-end <span class="pill bench">🔬 C6</span></h3>
+        <div class="meta">VoiceFilter-Lite + Personal VAD 2.0 (8-bit, enrolled at login) → only the enrolled user's audio passes.
+        <span class="pill warn">⚠ must stay quiet on thinking-pauses</span></div>
+      </div>
+      <div class="arrow">▼</div>
+
+      <div class="node">
+        <span class="tag">endpointing</span>
+        <h3>Silero VAD <span class="pill ok">✓ &lt;1 ms</span> → Smart-Turn v3.1 semantic EOU <span class="pill ok">✓</span></h3>
+        <div class="meta">Reads prosody + fillers so "the findings are… uh…" doesn't finalize early.
+        <span class="pill warn">⚠ "~12 ms" is best-case hi-end CPU; 20–95 ms typical</span></div>
+      </div>
+      <div class="arrow">▼</div>
+
+      <div class="node" style="border-color:var(--line2)">
+        <span class="tag">router</span>
+        <h3>Command-vs-dictation separator <span class="pill bench">🔬 B8</span></h3>
+        <div class="meta">partial-ASR lexical (primary) + prosody (early reject) + app-mode/history (sequential routing).
+        <span class="pill warn">⚠ no off-the-shelf solution · tune FALSE-ACCEPT first</span></div>
+      </div>
+
+      <div class="flowlabel">│ splits the stream ─ command span ◄──┴──► dictation span │</div>
+
+      <div class="lanes">
+        <!-- COMMAND LANE -->
+        <div class="lane cmd">
+          <div class="lane-title">◀ Command lane <span style="color:var(--mut);font-weight:500;text-transform:none;letter-spacing:0">latency #1 · on-device</span></div>
+          <div class="lane-sub">PHI-safe · fires on partials</div>
+
+          <div class="node">
+            <h3>On-device streaming STT</h3>
+            <div class="meta">partial deltas · <span class="pill ok">✓ Moonshine-Tiny 69 ms x86</span> <span class="pill bench">🔬 Parakeet-EOU / sherpa</span></div>
+          </div>
+          <div class="mini-arrow">▼</div>
+
+          <div class="decoder">
+            <span class="tag" style="color:var(--cmd)">intent decoder · parallel · fire-on-partial (NOT a grammar decoder)</span>
+            <div class="row"><span>L1 &nbsp;Aho-Corasick / regex</span><span>0.01–5 ms</span></div>
+            <div class="row"><span>L1b SymSpell + Metaphone slots</span><span>🔬 B5</span></div>
+            <div class="row"><span>L2 &nbsp;Model2Vec cosine</span><span>✓ &lt;1 ms</span></div>
+          </div>
+          <div class="mini-arrow">▼</div>
+
+          <div class="node">
+            <h3>Cost-tiered commit gate <span class="pill ok">✓ A1/A6</span></h3>
+            <div class="meta">optimistic <b>N=1–2</b> · default <b>N=2–3</b> · destructive = revision-window 0 / clarify</div>
+          </div>
+          <div class="mini-arrow">▼ &nbsp;miss / fuzzy →</div>
+
+          <div class="node" style="border-style:dashed">
+            <h3>L3 LLM fallback <span style="color:var(--mut);font-weight:400;font-size:11.5px">(rare)</span></h3>
+            <div class="meta"><span class="ms">+80–400 ms</span> · de-identify (Philter/Presidio) → ZDR+BAA (Bedrock-Claude).
+            <span class="pill warn">⚠ LLM never sees PHI</span></div>
+          </div>
+        </div>
+
+        <!-- DICTATION LANE -->
+        <div class="lane dict">
+          <div class="lane-title">Dictation lane ▶ <span style="color:var(--mut);font-weight:500;text-transform:none;letter-spacing:0">accuracy #1 · cloud</span></div>
+          <div class="lane-sub">leaves device under BAA</div>
+
+          <div class="node">
+            <h3>WebRTC transport <span class="pill ok">✓</span></h3>
+            <div class="meta">Opus + NetEQ jitter buffer + PLC/FEC — loss-tolerant (WebSocket only server↔STT)</div>
+          </div>
+          <div class="mini-arrow">▼</div>
+
+          <div class="node">
+            <h3>Cloud STT · Deepgram Nova-3 Medical</h3>
+            <div class="meta">BAA + zero-retention <span class="pill bench">🔬 no first-partial SLA</span></div>
+          </div>
+          <div class="mini-arrow">▼</div>
+
+          <div class="node">
+            <h3>Dictation accumulator</h3>
+            <div class="meta">interim + final → report buffer</div>
+          </div>
+          <div class="mini-arrow">▼</div>
+
+          <div class="node">
+            <h3>📝 Report editor</h3>
+            <div class="meta">section-by-section · changed sections flash</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flowlabel" style="margin-top:14px">↺ command-span subtraction — claimed command words removed from dictation buffer + UNDO LOG (medico-legal)</div>
+    </div>
+
+    <div class="arrow">▼</div>
+    <div class="node" style="border-color:rgba(45,212,191,.35);background:linear-gradient(180deg,rgba(45,212,191,.07),transparent)">
+      <span class="tag" style="color:var(--teal)">act</span>
+      <h3>Action registry → reducer / session-FSM → UI &amp; state &nbsp;(PACS · editor · signing)</h3>
+      <div class="meta">optimistic preview-then-confirm · clarification prompts ("did you mean the chest or abdomen CT?")</div>
+    </div>
+
+    <div class="callout"><b>The load-bearing latency fact:</b> the <b>fire-on-partial</b> path (navigation) can reach
+    <b>sub-100 ms</b> and fires <i>before</i> the user stops. Anything that waits for the <b>final</b> transcript
+    (destructive ops) pays the <b>200–900 ms endpoint floor</b> — irreducible on <i>any</i> hardware. The architectural lever is the <b>commit policy</b>, not the CPU.</div>
+  </section>
+
+  <!-- ============ 2 · REGISTRY ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <div><h2>Control plane — the command registry</h2>
+      <p>One declaration, four consumers. The “tree of commands” made concrete and drift-free.</p></div>
+    </div>
+
+    <div class="source-card">
+      <span class="tag">single source of truth</span>
+      <h3 style="margin:2px 0 6px;font-size:15px">CommandDef</h3>
+      <code>id · title · scope · patterns · synonyms · anchors · slots · confirm · clarify · execute</code>
+    </div>
+    <div class="arrow">▼ &nbsp; build-time 4-way generator &nbsp; <span style="font-size:12px;color:var(--dim)">(run once · outputs git-ignored · golden round-trip CI test)</span> &nbsp; ▼</div>
+
+    <div class="fanout">
+      <div class="node"><h3>L1 regex / FST</h3><div class="meta">Aho-Corasick <span class="pill ok">✓ standard</span></div></div>
+      <div class="node"><h3>L2 embedding anchors</h3><div class="meta">vectors <span class="pill warn">⚠ NOT derivable from grammar — sync by codegen</span></div></div>
+      <div class="node"><h3>L3 LLM tool schema</h3><div class="meta">GBNF/XGrammar <span class="pill ok">✓ valid ≠ correct</span></div></div>
+      <div class="node"><h3>Executor binding</h3><div class="meta">execute() <span class="pill ok">✓</span></div></div>
+      <div class="node"><h3>(opt.) Rhino YAML</h3><div class="meta"><span class="pill warn">⚠ LOSSY — drops guards, recursion, dynamic slots</span></div></div>
+    </div>
+
+    <div class="callout"><b>The genuinely new engineering:</b> nobody ships the <b>{LLM-schema + embedding-anchors}</b>
+    legs of this generator in lockstep — Jovo/Amazon cover only {grammar + FST}. That co-generator is yours to build. <span class="pill bench" style="margin-left:4px">🔬 open question B4</span></div>
+  </section>
+
+  <!-- ============ 3 · TREE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <div><h2>The command tree, prerequisites &amp; “dynamic” gating</h2>
+      <p>Hierarchy = <code style="font-family:var(--mono);font-size:12px">scope.parent</code> (≡ SRGS rule-refs, HTN↔CFG). Prerequisite = <code style="font-family:var(--mono);font-size:12px">scope.requires(ctx)</code>.</p></div>
+    </div>
+
+    <div class="twocol">
+      <div class="node">
+        <span class="tag">authored — the tree</span>
+        <div class="tree">
+worklist ─┬─ <span class="b">case.open</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;<span class="req">└ requires: worklist mode</span><br>
+case-open ┼─ <span class="b">findings.dictate</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└ <span class="b">findings.differential</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="req">parent: findings · requires: selection</span><br>
+editing ──┼─ <span class="asy">report.generate_impression</span> <span class="asy">(async)</span><br>
+signing ──┴─ <span class="destr">report.sign_and_next</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="destr">└ confirm: 'always'  ⚠ destructive</span>
+        </div>
+        <div class="keymap">
+          <div><code>scope.parent</code> &nbsp;= the TREE (≡ SRGS &lt;ruleref&gt;, HTN↔CFG isomorphism)</div>
+          <div><code>scope.requires</code> = PREREQUISITE guard (≡ VoiceXML FIA cond)</div>
+          <div><b style="color:var(--ink)">Chaining</b> = a state-machine problem, <i>not</i> a grammar one</div>
+        </div>
+      </div>
+
+      <div class="node" style="border-color:rgba(56,189,248,.3)">
+        <span class="tag" style="color:var(--cmd)">runtime — the hot path (must be cheap)</span>
+        <div class="node" style="background:rgba(255,255,255,.02)">
+          <h3>Gate / swap pre-compiled, per-mode active set</h3>
+          <div class="meta">pointer swap on mode change (µs) + <code style="font-family:var(--mono);font-size:11px">scope.requires(ctx)</code> as a runtime <b>mask</b></div>
+        </div>
+        <div class="callout" style="margin-top:12px"><b>⚠ NOT a recompile.</b> A literal per-utterance/per-state grammar recompile (Kaldi HCLG determinize/minimize, or a Rhino .rhn retrain) costs <b>seconds</b> — fatal to the &lt;100 ms budget. “Dynamic” must mean <b>gate/swap</b>.</div>
+        <div class="callout good" style="margin-top:10px">Smaller active set = <b>faster + fewer false-accepts</b>. Reachability is a <b>hard gate</b> — contextual biasing only boosts, it never excludes.</div>
+        <div style="margin-top:12px;font-size:12.5px;color:var(--mut)">
+          <b style="color:var(--ink)">Prerequisite not met →</b><br>
+          ├─ auto-satisfiable: silently run establishing cmd, resume (Rasa call/return)<br>
+          └─ state-changing: <span style="color:var(--warn)">PROMPT / CONFIRM ⚠ default for medico-legal safety</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · LATENCY + HW ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <div><h2>Latency budget &amp; hardware ladder</h2>
+      <p>Verified, trust-the-floor. Fire-on-partial fires <i>before</i> the user stops → perceived ≈ 0.</p></div>
+    </div>
+
+    <div style="font:600 11px/1 var(--mono);color:var(--dim);margin-bottom:8px">FIRE-ON-PARTIAL COMMON COMMAND &nbsp;≈ 80–150 ms total <span class="pill ok">✓</span></div>
+    <div class="latbar">
+      <div class="b1">capture<br>20 ms</div>
+      <div class="b2">STT partial<br>30–80 ms</div>
+      <div class="b3">L1<br>≤5</div>
+      <div class="b4">L2<br>&lt;1</div>
+      <div class="b5">dispatch<br>1–5</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+      <span style="font:600 11px/1 var(--mono);color:var(--warn)">ENDPOINTED / DESTRUCTIVE →</span>
+      <div class="endpoint" style="height:34px">+ endpoint silence 200–900 ms &nbsp;⚠ irreducible on any hardware &nbsp;🔬 F1/F2</div>
+    </div>
+
+    <table class="tiers">
+      <thead><tr><th>Tier</th><th>Hardware</th><th>Mouth-to-command</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><b>0</b></td><td>Thin client, all cloud</td><td>~250–500 ms</td><td>network leg dominates</td></tr>
+        <tr class="golden"><td><b class="star">★ 1</b></td><td><b>Modern CPU, no GPU</b></td><td><b>~80–150 ms</b></td><td><b>golden medium — start here</b></td></tr>
+        <tr><td><b>2</b></td><td>Apple Silicon / ANE / WebGPU</td><td>~60–110 ms</td><td>free bonus — encoder 3–6× faster (not the endpoint floor)</td></tr>
+        <tr><td><b>3</b></td><td>Single consumer GPU</td><td>—</td><td>decisive only for the local LLM / dictation cold lane · one shared box</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Voice Cockpit — architecture map · generated 2026-06-06 from
+    <code>ARCHITECTURE.md</code>, <code>COMMAND-REGISTRY.md</code>, <code>SCAFFOLD-AND-PHASES.md</code>,
+    and this session's verified <code>WEB-VERIFICATION.md</code> + <code>COMMAND-TREE-FEASIBILITY.md</code>.
+    Latency = trust-the-floor (real-audio / weaker-CPU end), not vendor headline. 🔬 items remain bench-only until measured on real reading-room audio.
+  </footer>
+
+</div>
+</body>
+</html>
