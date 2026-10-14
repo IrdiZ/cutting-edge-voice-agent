@@ -1,12 +1,12 @@
 # Phase-0 bench
 
 Throwaway-friendly measurement harness for the voice cockpit. Its only
-job (per [`../PHASE-0-BENCH.md`](../PHASE-0-BENCH.md)) is to turn the disputed
-numbers in [`../research/OPEN-QUESTIONS.md`](../research/OPEN-QUESTIONS.md) into
+job (per [`../docs/PHASE-0-BENCH.md`](../docs/PHASE-0-BENCH.md)) is to turn the disputed
+numbers in [`../docs/research/OPEN-QUESTIONS.md`](../docs/research/OPEN-QUESTIONS.md) into
 **measured facts** on real audio + real hardware, and flip 🔴 tickets to ✅.
 
-**This is not product code.** Optimize for fast iteration. No real PHI — the
-synthetic dataset ships a mock worklist; real reading-room audio is dropped into
+**This is not product code.** Optimize for fast iteration. No real patient data. The
+synthetic dataset ships a mock worklist; real recorded audio is dropped into
 `datasets/audio/` (git-ignored).
 
 ## Run it
@@ -29,7 +29,7 @@ bench/
 │  ├─ trace/        stage-boundary timestamp bus (capture→…→render); headline = mouth-to-command
 │  ├─ adapters/     SttAdapter contract + MockSttAdapter (deterministic replay)
 │  ├─ decoder/      L1 command matcher STUB (real cascade is Phase 2)
-│  ├─ scorecard/    PHASE-0-BENCH.md §D metrics + table formatter
+│  ├─ scorecard/    docs/PHASE-0-BENCH.md §D metrics + table formatter
 │  └─ stats.ts      percentile / mean helpers
 ├─ datasets/        synthetic generator + real-audio manifest loader
 └─ experiments/     one runner per §E head-to-head (stt-bakeoff today)
@@ -70,6 +70,6 @@ numbers as a lower bound until cross-checked against the camera rig.
 
 **Before trusting any number here:** replace the PLACEHOLDER engine configs in
 `experiments/stt-bakeoff.ts` with the values settled in
-`../research/WEB-VERIFICATION.md`, and wire real adapters for the engines that doc
+`../docs/research/WEB-VERIFICATION.md`, and wire real adapters for the engines that doc
 clears. Everything marked bench-only there is what this harness must measure on
 real audio + hardware.

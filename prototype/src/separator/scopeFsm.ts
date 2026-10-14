@@ -1,5 +1,5 @@
 // ScopeFSM — the dominant, structural, auditable defense of the B8 separator
-// (research/B8-SEPARATOR-DESIGN.md, Stage 0). App state is a finite-state machine;
+// (docs/research/B8-SEPARATOR-DESIGN.md, Stage 0). App state is a finite-state machine;
 // each command is reachable only in certain scopes. matchL1 is only ever called
 // with the reachable subset, so an out-of-scope intent is structurally absent —
 // never scored, never fired.

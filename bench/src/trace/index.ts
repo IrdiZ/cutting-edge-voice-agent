@@ -1,6 +1,6 @@
 // Stage-boundary timestamp bus — the spine every experiment logs to.
 //
-// PHASE-0-BENCH.md §B: capture every hop so the per-stage budget can be
+// docs/PHASE-0-BENCH.md §B: capture every hop so the per-stage budget can be
 // reconstructed. Each timestamp is milliseconds on a single monotonic clock.
 // The headline metric is mouth-to-command (capture -> commandClaim).
 

@@ -3,7 +3,7 @@
 // Produces a mock worklist + a command corpus with multiple phrasings,
 // pure-dictation samples (with hard clinical terms for WER), and adversarial
 // negatives (dictation that reads like a command — drives the false-accept
-// measurement that PHASE-0-BENCH.md §D weights heaviest).
+// measurement that docs/PHASE-0-BENCH.md §D weights heaviest).
 //
 // This is a STAND-IN until real reading-room audio lands in datasets/audio/.
 

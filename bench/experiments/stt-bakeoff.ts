@@ -1,4 +1,4 @@
-// Experiment: STT bake-off (PHASE-0-BENCH.md §E.1) — the end-to-end spine demo.
+// Experiment: STT bake-off (docs/PHASE-0-BENCH.md §E.1) — the end-to-end spine demo.
 //
 // Runs each candidate STT engine over the command + negative sets, fires the L1
 // matcher on partials under a cost-tiered commit policy (A1/A6: navigation fires
@@ -8,7 +8,7 @@
 // !!! PLACEHOLDER NUMBERS !!!
 // The engine latency configs below are the DISPUTED literature values from
 // OPEN-QUESTIONS.md (A2/A3/A4/A9), not measurements. They exist so the harness
-// runs today. Once research/WEB-VERIFICATION.md lands, replace these with the
+// runs today. Once docs/research/WEB-VERIFICATION.md lands, replace these with the
 // settled numbers, and replace MockSttAdapter with real adapters where the doc
 // says an engine is worth wiring. Rows stay marked *PH until measured locally.
 

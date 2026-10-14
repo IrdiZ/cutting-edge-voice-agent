@@ -1,4 +1,4 @@
-// Dataset shapes for the Phase-0 inputs (PHASE-0-BENCH.md §C).
+// Dataset shapes for the Phase-0 inputs (docs/PHASE-0-BENCH.md §C).
 //
 // NO REAL PHI. The synthetic generator produces a mock worklist; real
 // reading-room audio is dropped into datasets/audio/ (git-ignored) and

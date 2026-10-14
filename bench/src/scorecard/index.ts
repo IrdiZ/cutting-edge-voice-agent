@@ -1,4 +1,4 @@
-// Scorecard — the Phase-0 metrics from PHASE-0-BENCH.md §D, plus a plain-text
+// Scorecard — the Phase-0 metrics from docs/PHASE-0-BENCH.md §D, plus a plain-text
 // table formatter. Each experiment produces one ScorecardRow per engine/config.
 //
 // Headline = mouth-to-command p50/p95. False-accept rate is weighted heaviest

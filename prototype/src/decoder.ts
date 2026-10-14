@@ -19,7 +19,7 @@ export interface Match {
   cRaw: number;
 }
 
-// Shared normalizer (COMMAND-REGISTRY): strip discourse/politeness/filler words that
+// Shared normalizer (docs/COMMAND-REGISTRY.md): strip discourse/politeness/filler words that
 // are never command-bearing, so coverage reflects CONTENT words. "let's go to the next
 // case please" → ["go","next","case"]. Keeps triggers + names; raises real-command
 // coverage without helping embedded-in-prose hits (prose isn't just fillers).

@@ -1,6 +1,6 @@
 // Minimal L1 command matcher — a STUB for the bench spine, not the product
 // decoder. Phase 2 builds the real parallel cascade (regex/FST + SymSpell slots
-// + Model2Vec + LLM fallback) per SCAFFOLD-AND-PHASES.md. This version only does
+// + Model2Vec + LLM fallback) per docs/SCAFFOLD-AND-PHASES.md. This version only does
 // substring phrase matching on a partial so the trace/scorecard plumbing has
 // something to fire on. It is deliberately dumb and deterministic.
 

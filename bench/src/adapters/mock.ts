@@ -4,7 +4,7 @@
 // on a configurable latency profile.
 //
 // The `ttfpMs` / `perWordMs` knobs are intended to be set to the values that
-// research/WEB-VERIFICATION.md settles for each candidate engine — so the
+// docs/research/WEB-VERIFICATION.md settles for each candidate engine — so the
 // bake-off can be dry-run with literature numbers, then re-run against real
 // adapters once those exist. Anything sourced this way MUST keep
 // `meta.placeholder = true` until measured locally.

@@ -3,7 +3,7 @@
 // Any engine (on-device Parakeet/Moonshine/sherpa-onnx, browser Voxtral-WebGPU,
 // cloud Deepgram Nova-3 Medical) implements SttAdapter so it can be swapped into
 // an experiment without touching the harness. Engines are added AFTER
-// research/WEB-VERIFICATION.md settles which are worth wiring (vs stubbing).
+// docs/research/WEB-VERIFICATION.md settles which are worth wiring (vs stubbing).
 
 export interface Word {
   readonly text: string;

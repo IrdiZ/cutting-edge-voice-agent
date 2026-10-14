@@ -1,6 +1,6 @@
 // The reactive loop: partial -> SGFM separator (scope gate + coverage confidence)
 // -> command | pending(destructive) | dictation. The separator replaces the old
-// naive mode-flag gate; see research/B8-SEPARATOR-DESIGN.md. Measured on the 128-
+// naive mode-flag gate; see docs/research/B8-SEPARATOR-DESIGN.md. Measured on the 128-
 // utterance corpus: false-accept 34%→0%, destructive false-fire 11→0 (eval/run-eval.ts).
 //
 // Safety is STRUCTURAL: while dictating, navigation + destructive are unreachable

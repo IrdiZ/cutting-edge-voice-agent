@@ -6,7 +6,7 @@
 //
 // We replay each corpus utterance as cumulative word prefixes through the real
 // separator under a LocalAgreement-N commit gate (a command commits only when the SAME
-// fireable intent survives N consecutive partials — the COMMAND-REGISTRY "commit gate").
+// fireable intent survives N consecutive partials — the docs/COMMAND-REGISTRY.md "commit gate").
 // N=1 is today's fire-on-first-confident-partial; N>=2 is the designed stability gate.
 //
 // Run: node eval/streaming-eval.ts   (diagnostic — NOT a gate; run-eval.ts is the gate)
@@ -96,7 +96,7 @@ for (const r of rows) {
 console.log('\nReadout:');
 console.log('  · FAR@dictating should be ~0 at every N (scope gate makes nav/destructive unreachable while dictating).');
 console.log('  · FAR@case_open is the streaming exposure the whole-utterance gate is blind to; watch it fall as N rises.');
-console.log('  · A higher N trades a one-partial latency cost for fewer prefix mis-fires — the COMMAND-REGISTRY commit gate.');
+console.log('  · A higher N trades a one-partial latency cost for fewer prefix mis-fires — the docs/COMMAND-REGISTRY.md commit gate.');
 if (firstFar.hits.length) {
   console.log('\n  N=1 streaming false-accepts @ case_open (prefix that fired):');
   for (const h of firstFar.hits.slice(0, 12)) console.log(`    · "${h.text}"  → ${h.intent}  @ "${h.at}"`);

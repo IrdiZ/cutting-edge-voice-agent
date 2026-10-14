@@ -1,4 +1,4 @@
-// SGFM-Sep — the command-vs-dictation separator (research/B8-SEPARATOR-DESIGN.md).
+// SGFM-Sep — the command-vs-dictation separator (docs/research/B8-SEPARATOR-DESIGN.md).
 // Four stages, each can only REMOVE a candidate or DELAY a fire; nothing downstream
 // resurrects an intent an upstream stage excluded. Pure on-device TS, sub-ms.
 //

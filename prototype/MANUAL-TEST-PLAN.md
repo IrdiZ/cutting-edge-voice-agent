@@ -101,8 +101,3 @@ step says "in one breath". Watch the cockpit + the latency HUD.
 - `npm run check` stays green (GATE PASS, FAR 0%, recall >= 80%).
 - E2 behaving as described is a PASS, not a bug (see the README streaming-eval note).
 
-## 4. If you want me to drive these for you
-
-I can execute Groups A-D against the live page via the Chrome DevTools MCP +
-the **Simulate** buttons (which push text through the exact same pipeline), and
-report a pass/fail table - no mic needed. Ask and I will.
